@@ -1,15 +1,13 @@
 ﻿
 (function(w){
 	
-	/* local hashs */
+	/* local dictionaries */
 	var css_props = [];
 	var css_alias = [];
 	
 	css_props.filter = css_alias.filter = null;
 	
-	/*
-		CSS aliases
-	*/
+	/* CSS aliases */
 	var alias = 'B,BB,BBS,BBW,BC,BL,BLS,BLW,BR,BRS,BRW,BS,BT,BTS,BTW,CI,CL,CO,CU,D,F,FF,FS,FT,FV,FW,FY,H,K,KA,KC,KI,KP,KR,KS,L,LH,LS,LSI,LSP,LST,LT,M,MB,MH,ML,MR,MS,MT,MW,OF,OFX,OFY,OP,P,PB,PBA,PBB,PL,PO,PR,PT,R,SH,SW,T,TA,TD,TI,TL,TO,TT,V,VA,W,WB,WP,WS,Z,ZI'.split(',');
 	var values = 'border,border-bottom,border-bottom-style,border-bottom-width,border-collapse,border-left,border-left-style,border-left-width,border-right,border-right-style,border-right-width,border-spacing,border-top,border-top-style,border-top-width,clip,clear,color,cursor,display,float,font-family,font-size,font,font-variant,font-weight,font-style,height,background,background-attachment,background-color,background-image,background-position,background-repeat,khtml-user-select,left,line-height,letter-spacing,list-style-image,list-style-position,list-style-type,list-style,margin,margin-bottom,max-height,margin-left,margin-right,moz-user-select,margin-top,max-width,overflow,overflow-x,overflow-y,opacity,padding,padding-bottom,page-break-after,page-break-before,padding-left,position,padding-right,padding-top,right,min-height,min-width,top,text-align,text-decoration,text-indent,table-layout,text-overflow,text-transform,visibility,vertical-align,width,word-break,white-space,word-spacing,zoom,z-index'.split(',');
 	
@@ -24,11 +22,6 @@
 	}
 	
 	
-	/*
-	*	CSS
-	*/
-	
-	
 	/* css alias decoding */
 	function dec(style, wrap){
 		if( !style ) return '';
@@ -40,20 +33,6 @@
 		style = style.replace( pattern, function( array, name, crap, value, index ){
 			name = props[ name.toUpperCase() ] || name;
 			
-			/*
-			switch(name){
-				case 'background-image':
-					value = 'url('+ IMG.src(value) +')';
-				break;
-			}
-			*/
-			
-			/* if -value- is numeric and the css property is not -z-index- nor -zoom- then adds the -px- 
-			
-			if( /^\d+$/.test( value ) && (name != 'z-index' && name != 'zoom') ){
-				value += 'px';
-			}
-			*/
 			if( /^\d+$/.test( value ) ){
 				switch(name){
 					case 'background-image':break;
@@ -70,9 +49,6 @@
 				}
 			}
 			
-			//opacity
-			//( && name != 'z-index' && name != 'zoom') ? 'px' : ''
-			
 			return (index?' ':'')+ name +':'+ value;
 		});
 		
@@ -87,12 +63,6 @@
 		var pattern = / *((-*\**[\w]+)+): *([-()\w, .#%=]*)/ig;
 		var alias = css_alias;
 		
-		/*
-		if( /^\d+px$/.test( value ) ){
-			value = value.replace('px','');
-		}
-		*/
-
 		style = style.replace( pattern, function( array, name, crap, value, index ){
 			name = alias[ name.toLowerCase() ] || name;
 			
@@ -103,9 +73,7 @@
 	}
 	
 	
-	/*
-		stylesheets indexing rules
-	*/
+	/* stylesheets indexing rules */
 	function index_rules(){
 		var hash = rules_hash;
 		
@@ -132,7 +100,10 @@
 			
 				/* rules */
 				while( j-- ){
-					name = rules[j].selectorText.toLowerCase().split(/[,| ]+/);
+					var selector_text = rules[j].selectorText;
+					if( selector_text == null ) continue;
+					
+					name = selector_text.toLowerCase().split(/[,| ]+/);
 					k = name.length;
 				
 					/* rule names, split by coma */
