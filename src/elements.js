@@ -300,7 +300,7 @@
 			//console.log( 'value:\t\t', value );
 		}
 
-		if ( result == null || result.length == 0 ) {
+		if ( result == null || (result instanceof Array && result.length == 0) ) {
 			return null;
 		}
 
@@ -587,13 +587,20 @@
 	s: string
 	p: position [undefined writes, 0 inserts before, 1 inserts after]
 	*/
-	$.plug( 'write', 'all', function ( s, p ) {
-		var t = this, a = t.nodeName ? [t] : t, j = a.length, e, v;
+	$.plug( 'write_html', 'all', function ( string, position ) {
+		var t = this;
+		
+		// if the current element has the property 'nodeName' it means it's an actual DOM element so it is turned
+		// into an array
+		var args = t.nodeName ? [t] : t;
+		var j = args.length;
+		var item;
+		var value;
 
 		while ( j-- ) {
-			e = a[j];
-			v = e.innerHTML;
-			e.innerHTML = p == undefined ? s : ( p == 0 ? s + v : v + s );
+			item = args[j];
+			value = item.innerHTML;
+			item.innerHTML = position == undefined ? string : ( position == 0 ? string + value : value + string );
 		}
 
 		document.close();

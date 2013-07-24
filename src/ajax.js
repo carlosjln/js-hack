@@ -90,7 +90,7 @@
 		function fn_retry(){
 			if( countdown-- > 0 ){
 				if( screen ){
-					text.write( (retry.message + space + ( Math.ceil(countdown+1) )).replace(/ /g,space) );
+					text.write_html( (retry.message + space + ( Math.ceil(countdown+1) )).replace(/ /g,space) );
 					screen_message.center();
 				}
 				
@@ -119,9 +119,9 @@
 				
 				if( screen ){
 					icon.src = Img( icons.error, false )
-					text.write( error.message.replace( / /g, space ) );
+					text.write_html( error.message.replace( / /g, space ) );
 					
-					var a = $.create('a').css('C:red;TD:underline;CU:pointer;ML:5').write('retry');
+					var a = $.create('a').css('C:red;TD:underline;CU:pointer;ML:5').write_html('retry');
 					a.handle('click', function(e){
 						e.cancel();
 						t.request( options.url, options );
@@ -262,7 +262,7 @@
 			if( target && screen.show ){
 				// WRITES THE MESSAGE TO DISPLAY
 				icon.src = Img( screen.icons.loading, false );
-				text.write( screen.message );
+				text.write_html( screen.message );
 				
 				screen_element.show_mask = showMask;
 				
@@ -442,7 +442,7 @@
     				target.insert( create( 'option', item[0], item[1] ) );
     			}
 			}else{
-				target.write( response.text );
+				target.write_html( response.text );
 			}
 		}
 		
